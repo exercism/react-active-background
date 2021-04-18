@@ -60,3 +60,7 @@ export interface IActiveBackgroundPattern {
   stop(): void
 }
 ```
+
+## Authors
+
+This library was originally created by @neenjaw. It is maintained by @neenjaw, @sleeplessbyte and the Exercism team. See the [GitHub contributors graph](https://github.com/exercism/react-active-background/graphs/contributors) for a full list of contributors.
