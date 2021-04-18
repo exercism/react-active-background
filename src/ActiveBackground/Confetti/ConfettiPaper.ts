@@ -18,23 +18,26 @@ const X_VELOCITY = 40
 const Y_VELOCITY_VARIANCE = 60
 const Y_VELOCITY_MINIMUM = 50
 
-class ConfettiPaper {
-  position: Vector2D
-  rotationSpeed: number
-  angle: number
-  cosRotation: number
-  rotation: number
-  size: number
-  oscillationSpeed: number
-  xVelocity: number
-  yVelocity: number
-  corners: Vector2D[]
-  time: number
-  frontColor: string
-  backColor: string
+type Position = { x: number, y: number }
+type Positions = readonly Position[]
 
-  parent: Confetti
-  fetchColors: () => string[]
+export class ConfettiPaper {
+  private readonly position: Vector2D
+  private readonly rotationSpeed: number
+  private readonly angle: number
+  private cosRotation: number
+  private rotation: number
+  private readonly size: number
+  private readonly oscillationSpeed: number
+  private readonly xVelocity: number
+  private readonly yVelocity: number
+  private readonly corners: Vector2D[]
+  private time: number
+  private readonly frontColor: string
+  private readonly backColor: string
+
+  private readonly parent: Confetti
+  private readonly fetchColors: () => string[]
 
   constructor(config: ConfettiPaperConfig) {
     this.parent = config.parent
@@ -66,7 +69,7 @@ class ConfettiPaper {
     this.size = 5.0
   }
 
-  update(dt: number) {
+  public update(dt: number): void {
     this.time += dt
     this.rotation += this.rotationSpeed * dt
     this.cosRotation = Math.cos((this.rotation * Math.PI) / 180)
@@ -82,7 +85,7 @@ class ConfettiPaper {
     }
   }
 
-  draw(context: CanvasRenderingContext2D) {
+  public draw(context: CanvasRenderingContext2D): void {
     if (this.cosRotation > 0) {
       context.fillStyle = this.frontColor
     } else {
@@ -97,7 +100,7 @@ class ConfettiPaper {
     context.fill()
   }
 
-  computeCornerDrawPositions() {
+  private computeCornerDrawPositions(): Positions {
     return this.corners.map(({ x, y }, i) => {
       x = this.position.x + x * this.size
       y = this.position.y + y * this.size * this.cosRotation
@@ -115,4 +118,3 @@ function computeCorners(angle: number) {
   })
 }
 
-export { ConfettiPaper }

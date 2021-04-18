@@ -22,33 +22,33 @@ const OSCILLATION_DISTANCE_MINIMUM = 40
 const Y_VELOCITY_VARIANCE = 40
 const Y_VELOCITY_MINIMUM = 80
 
-class ConfettiRibbon {
-  parent: Confetti
-  fetchColors: () => string[]
+export class ConfettiRibbon {
+  private readonly parent: Confetti
+  private readonly fetchColors: () => string[]
 
-  currPosition!: Vector2D
-  prevPosition!: Vector2D
+  private currPosition!: Vector2D
+  private prevPosition!: Vector2D
 
-  particleCount: number
-  particleMass: number
-  particleDrag: number
-  particleDistance: number
-  thickness: number
-  angle: number
+  private readonly particleCount: number
+  private readonly particleMass: number
+  private readonly particleDrag: number
+  private readonly particleDistance: number
+  private readonly thickness: number
+  private readonly angle: number
 
-  xOff: number
-  yOff: number
+  private readonly xOff: number
+  private readonly yOff: number
 
-  frontColor!: string
-  backColor!: string
+  private frontColor!: string
+  private backColor!: string
 
-  time!: number
-  velocityInherit!: number
-  oscillationSpeed!: number
-  oscillationDistance!: number
-  yVelocity!: number
+  private time!: number
+  private velocityInherit!: number
+  private oscillationSpeed!: number
+  private oscillationDistance!: number
+  private yVelocity!: number
 
-  particles!: EulerMass[]
+  private particles!: EulerMass[]
 
   constructor({
     particleCount = 30,
@@ -76,7 +76,7 @@ class ConfettiRibbon {
     this.reset()
   }
 
-  reset() {
+  private reset(): void {
     const x = Math.random() * this.parent.width
     const y = -1 * Math.random() * this.parent.height * 2
 
@@ -109,7 +109,7 @@ class ConfettiRibbon {
     )
   }
 
-  update(dt: number) {
+  public update(dt: number): void {
     this.time += dt * this.oscillationSpeed
     this.currPosition.x += Math.cos(this.time) * this.oscillationDistance * dt
     this.currPosition.y += this.yVelocity * dt
@@ -156,7 +156,7 @@ class ConfettiRibbon {
     }
   }
 
-  draw(context: CanvasRenderingContext2D) {
+  public draw(context: CanvasRenderingContext2D): void {
     for (let index = 0; index < this.particles.length - 1; index += 1) {
       const particle = this.particles[index]
       const nextParticle = this.particles[index + 1]
@@ -183,13 +183,13 @@ class ConfettiRibbon {
     }
   }
 
-  drawFirstParticle(
+  private drawFirstParticle(
     context: CanvasRenderingContext2D,
     particle: EulerMass,
     nextParticle: EulerMass,
     p0: Vector2D,
     p1: Vector2D
-  ) {
+  ): void {
     context.beginPath()
     context.moveTo(particle.position.x, particle.position.y)
     context.lineTo(nextParticle.position.x, nextParticle.position.y)
@@ -212,13 +212,13 @@ class ConfettiRibbon {
     context.fill()
   }
 
-  drawMiddleParticle(
+  private drawMiddleParticle(
     context: CanvasRenderingContext2D,
     particle: EulerMass,
     nextParticle: EulerMass,
     p0: Vector2D,
     p1: Vector2D
-  ) {
+  ): void {
     context.beginPath()
     context.moveTo(particle.position.x, particle.position.y)
     context.lineTo(nextParticle.position.x, nextParticle.position.y)
@@ -241,13 +241,13 @@ class ConfettiRibbon {
     context.fill()
   }
 
-  drawLastParticle(
+  private drawLastParticle(
     context: CanvasRenderingContext2D,
     particle: EulerMass,
     nextParticle: EulerMass,
     p0: Vector2D,
     p1: Vector2D
-  ) {
+  ): void {
     context.beginPath()
     context.moveTo(particle.position.x, particle.position.y)
     context.lineTo(nextParticle.position.x, nextParticle.position.y)
@@ -266,5 +266,3 @@ function sideFacing(
 ) {
   return (x1 - x2) * (y3 - y2) - (y1 - y2) * (x3 - x2)
 }
-
-export { ConfettiRibbon }

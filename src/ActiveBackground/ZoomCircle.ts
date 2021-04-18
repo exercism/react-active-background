@@ -1,14 +1,14 @@
-class ZoomCircle {
-  canvas: HTMLCanvasElement
-  context: CanvasRenderingContext2D | null
+export class ZoomCircle {
+  private readonly canvas: HTMLCanvasElement
+  private readonly context: CanvasRenderingContext2D | null
 
-  ratio: number
-  width: number
-  height: number
+  private readonly ratio: number
+  private readonly width: number
+  private readonly height: number
 
-  time: number
+  private time: number
 
-  animationFrameRequestId: number | null
+  private animationFrameRequestId: number | null
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
@@ -23,17 +23,17 @@ class ZoomCircle {
     this.animationFrameRequestId = null
   }
 
-  start() {
+  public start(): void {
     this.animationFrameRequestId = requestAnimationFrame(this.render.bind(this))
   }
 
-  stop() {
+  public stop(): void {
     if (this.animationFrameRequestId) {
       cancelAnimationFrame(this.animationFrameRequestId)
     }
   }
 
-  render() {
+  public render(): void {
     if (!this.context) {
       return
     }
@@ -53,5 +53,3 @@ class ZoomCircle {
     this.animationFrameRequestId = requestAnimationFrame(this.render.bind(this))
   }
 }
-
-export { ZoomCircle }

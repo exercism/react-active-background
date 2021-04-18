@@ -1,10 +1,6 @@
-class Vector2D {
-  x: number
-  y: number
+export class Vector2D {
 
-  constructor(x: number, y: number) {
-    this.x = x
-    this.y = y
+  constructor(public x: number, public y: number) {
   }
 
   /**
@@ -25,65 +21,40 @@ class Vector2D {
     return new Vector2D(v0.x - v1.x, v0.y - v1.y)
   }
 
-  /**
-   * Instance methods
-   */
-
-  clone() {
-    return new Vector2D(this.x, this.y)
-  }
-
-  get length() {
+  public get length(): number {
     return Math.sqrt(this.squareLength)
   }
 
-  get squareLength() {
+  public get squareLength(): number {
     return this.x * this.x + this.y * this.y
   }
 
-  add(vector: Vector2D) {
-    const clone = this.clone()
-    clone.x += vector.x
-    clone.y += vector.y
-
-    return clone
+  public clone(): Vector2D {
+    return new Vector2D(this.x, this.y)
   }
 
-  subtract(vector: Vector2D) {
-    const clone = this.clone()
-    clone.x -= vector.x
-    clone.y -= vector.y
-
-    return clone
+  public add(vector: Vector2D): Vector2D {
+    return new Vector2D(this.x + vector.x, this.y + vector.y)
   }
 
-  multiply(factor: number) {
-    const clone = this.clone()
-    clone.x *= factor
-    clone.y *= factor
-
-    return clone
+  public subtract(vector: Vector2D): Vector2D {
+    return new Vector2D(this.x - vector.x, this.y- vector.y)
   }
 
-  divide(factor: number) {
-    const clone = this.clone()
-    clone.x /= factor
-    clone.y /= factor
-
-    return clone
+  public multiply(factor: number): Vector2D {
+    return new Vector2D(this.x * factor, this.y * factor)
   }
 
-  normalize() {
-    const clone = this.clone()
-    const squareLength = clone.squareLength
+  public divide(factor: number): Vector2D {
+    return new Vector2D(this.x / factor, this.y / factor)
+  }
 
-    if (squareLength === 0) {
-      return clone
+  public normalize(): Vector2D {
+    if (this.squareLength === 0) {
+      return this.clone()
     }
 
-    const factor = 1.0 / Math.sqrt(squareLength)
-    return clone.multiply(factor)
+    const factor = 1.0 / Math.sqrt(this.squareLength)
+    return this.multiply(factor)
   }
 }
-
-export { Vector2D }
