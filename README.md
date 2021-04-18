@@ -14,28 +14,26 @@ import * as React from 'react'
 import logo from './logo.svg'
 import './App.css'
 
-import { ActiveBackground, Confetti } from '@exercism/react-active-background'
+import { ActiveBackground, Confetti } from '@exercism/active-background'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        /*
-         * Active Background must be the first child in a react container component
-         */
-        <ActiveBackground pattern={Confetti} />
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <ActiveBackground pattern={Confetti}>
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>
+            Edit <code>src/App.tsx</code> and save to reload.
+          </p>
+          <a
+            className="App-link"
+            href="https://reactjs.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn React
+          </a>
+        </ActiveBackground>
       </header>
     </div>
   )
