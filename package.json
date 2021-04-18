@@ -1,5 +1,5 @@
 {
-  "name": "active-background",
+  "name": "@exercism/active-background",
   "version": "0.1.0",
   "description": "Give your elements an animated canvas background!",
   "main": "dist/index.js",
