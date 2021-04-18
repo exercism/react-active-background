@@ -1,7 +1,0 @@
-.active-background-canvas {
-  position: absolute;
-}
-
-.active-background-canvas ~ * {
-  position: relative;
-}

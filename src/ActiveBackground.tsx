@@ -6,6 +6,7 @@ export const ActiveBackground: React.FC<IActiveBackground> = ({
   pattern,
   patternOptions = {},
   className,
+  children,
 }) => {
   const [canvasRef, setRef] = React.useState<HTMLCanvasElement | null>(null)
   const onRefSet = React.useCallback((ref) => setRef(ref), [setRef])
@@ -55,5 +56,14 @@ export const ActiveBackground: React.FC<IActiveBackground> = ({
 
   const selfClassName = 'active-background-canvas'
   className = className ? `${className} ${selfClassName}` : selfClassName
-  return <canvas className={className} ref={onRefSet} />
+  return (
+    <>
+      <canvas
+        style={{ position: 'absolute' }}
+        className={className}
+        ref={onRefSet}
+      />
+      <div style={{ position: 'relative' }}>{children}</div>
+    </>
+  )
 }
