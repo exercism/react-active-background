@@ -14,7 +14,7 @@ import * as React from 'react'
 import logo from './logo.svg'
 import './App.css'
 
-import { ActiveBackground, Confetti } from '@exercism/react-active-background'
+import { ActiveBackground, Confetti } from '@exercism/active-background'
 
 function App() {
   return (
