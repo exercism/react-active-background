@@ -1,9 +1,5 @@
 # react-active-background
 
-<div style="width: fit-content; margin: 0 auto;">
-https://user-images.githubusercontent.com/8953691/115159564-04e76200-a051-11eb-84e5-fe36543cce13.mp4
-</div>
-
 ## Requirements
 
 - `react` >= 16.13.1
