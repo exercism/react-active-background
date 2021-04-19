@@ -19,7 +19,7 @@
     "typescript",
     "canvas"
   ],
-  "author": "Tim Austin",
+  "author": "Tim Austin <tim@neenjaw.com> (https://neenjaw.com)",
   "contributors": [
     "Derk-Jan Karrenbeld <derk-jan+git@karrenbeld.info> (https://derk-jan.com)"
   ],
@@ -35,6 +35,7 @@
     "rimraf": "^3.0.2",
     "typescript": "^4.2.4"
   },
+  "files": ["dist"],
   "peerDependencies": {
     "react": ">=16.13.1",
     "react-dom": ">=16.13.1"
