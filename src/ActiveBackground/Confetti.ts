@@ -1,11 +1,8 @@
-import {
-  IActiveBackgroundPattern,
-  ActiveBackgroundPatternOptions,
-} from '../index'
+import type { ActiveBackgroundPattern, PatternOptions } from '../ActiveBackground'
 import { ConfettiPaper } from './Confetti/ConfettiPaper'
 import { ConfettiRibbon } from './Confetti/ConfettiRibbon'
 
-interface ConfettiOptions extends ActiveBackgroundPatternOptions {
+export interface ConfettiOptions extends PatternOptions {
   speed?: number
   duration?: number
   confettiPaperCount?: number
@@ -25,20 +22,20 @@ const COLORS = [
   ['#ffd200', '#b06c00'],
 ]
 
-class Confetti implements IActiveBackgroundPattern {
-  canvas: HTMLCanvasElement
-  context: CanvasRenderingContext2D | null
+export class Confetti implements ActiveBackgroundPattern {
+  private readonly canvas: HTMLCanvasElement
+  private readonly context: CanvasRenderingContext2D | null
 
-  ratio: number
-  width: number
-  height: number
+  private readonly ratio: number
+  public readonly width: number
+  public readonly height: number
 
-  speed: number
-  duration: number
-  confettiPapers: ConfettiPaper[]
-  confettiRibbons: ConfettiRibbon[]
+  private readonly speed: number
+  private readonly duration: number
+  private readonly confettiPapers: ConfettiPaper[]
+  private readonly confettiRibbons: ConfettiRibbon[]
 
-  animationFrameRequestId: number | null
+  private animationFrameRequestId: number | null
 
   constructor(canvas: HTMLCanvasElement, options: ConfettiOptions = {}) {
     this.canvas = canvas
@@ -61,7 +58,7 @@ class Confetti implements IActiveBackgroundPattern {
     this.confettiPapers = [...new Array(confettiPaperCount)].map(() => {
       return new ConfettiPaper({
         parent: this,
-        fetchColors: fetchRandomColor,
+        fetchColors: getRandomColors,
       })
     })
 
@@ -71,24 +68,24 @@ class Confetti implements IActiveBackgroundPattern {
     this.confettiRibbons = [...new Array(confettiRibbonCount)].map(() => {
       return new ConfettiRibbon({
         parent: this,
-        fetchColors: fetchRandomColor,
+        fetchColors: getRandomColors,
       })
     })
 
     this.animationFrameRequestId = null
   }
 
-  start() {
+  public start(): void {
     this.animationFrameRequestId = requestAnimationFrame(this.render.bind(this))
   }
 
-  stop() {
+  public stop(): void {
     if (this.animationFrameRequestId) {
       cancelAnimationFrame(this.animationFrameRequestId)
     }
   }
 
-  render() {
+  public render(): void {
     if (!this.context) {
       return
     }
@@ -109,13 +106,7 @@ class Confetti implements IActiveBackgroundPattern {
   }
 }
 
-function getRandomColors(colors: string[][]) {
+function getRandomColors(colors: string[][] = COLORS): string[] {
   const randomIndex = Math.round(Math.random() * (colors.length - 1))
   return colors[randomIndex]
 }
-
-function fetchRandomColor() {
-  return getRandomColors(COLORS)
-}
-
-export { Confetti }

@@ -1,18 +1,34 @@
-import * as React from 'react'
+import type { ReactNode } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useResizeObserver } from './hooks/useResizeObserver'
-import { IActiveBackground, IActiveBackgroundPattern } from './index'
 
-export const ActiveBackground: React.FC<IActiveBackground> = ({
-  pattern,
-  patternOptions = {},
-  className,
-  children,
-}) => {
-  const [canvasRef, setRef] = React.useState<HTMLCanvasElement | null>(null)
-  const onRefSet = React.useCallback((ref) => setRef(ref), [setRef])
-  const [update, setUpdate] = React.useState({})
+export type PatternOptions = Record<string, unknown>
+export interface PatternConstructor<TOptions> {
+  new (
+    canvas: HTMLCanvasElement,
+    options?: TOptions
+  ): ActiveBackgroundPattern
+}
+export interface ActiveBackgroundPattern {
+  render(): void
+  start(): void
+  stop(): void
+}
 
-  const updateCanvasSizeAndPosition = React.useCallback(() => {
+export interface ActiveBackgroundProps<TPatternOptions = PatternOptions> {
+  Pattern: PatternConstructor<TPatternOptions>
+  patternOptions?: TPatternOptions
+  className?: string
+  children: ReactNode
+}
+
+
+export function ActiveBackground({ Pattern, patternOptions, className, children }: ActiveBackgroundProps): JSX.Element {
+  const [canvasRef, setRef] = useState<HTMLCanvasElement | null>(null)
+  const onRefSet = useCallback((ref) => setRef(ref), [setRef])
+  const [update, setUpdate] = useState({})
+
+  const updateCanvasSizeAndPosition = useCallback(() => {
     if (!canvasRef) {
       return
     }
@@ -30,19 +46,19 @@ export const ActiveBackground: React.FC<IActiveBackground> = ({
   }, [canvasRef, setUpdate])
 
   // Set canvas to size and position of parent element
-  React.useEffect(updateCanvasSizeAndPosition, [updateCanvasSizeAndPosition])
+  useEffect(updateCanvasSizeAndPosition, [updateCanvasSizeAndPosition])
 
   useResizeObserver({
     target: canvasRef?.parentElement,
     callback: updateCanvasSizeAndPosition,
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!canvasRef) {
       return
     }
 
-    const background: IActiveBackgroundPattern = new pattern(
+    const background = new Pattern(
       canvasRef,
       patternOptions
     )
@@ -52,7 +68,7 @@ export const ActiveBackground: React.FC<IActiveBackground> = ({
     return () => {
       background.stop()
     }
-  }, [canvasRef, pattern, patternOptions, update])
+  }, [canvasRef, Pattern, patternOptions, update])
 
   const selfClassName = 'active-background-canvas'
   className = className ? `${className} ${selfClassName}` : selfClassName
