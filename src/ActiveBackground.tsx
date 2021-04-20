@@ -1,13 +1,10 @@
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useResizeObserver } from './hooks/useResizeObserver'
 
 export type PatternOptions = Record<string, unknown>
 export interface PatternConstructor<TOptions> {
-  new (
-    canvas: HTMLCanvasElement,
-    options?: TOptions
-  ): ActiveBackgroundPattern
+  new (canvas: HTMLCanvasElement, options?: TOptions): ActiveBackgroundPattern
 }
 export interface ActiveBackgroundPattern {
   render(): void
@@ -20,10 +17,18 @@ export interface ActiveBackgroundProps<TPatternOptions = PatternOptions> {
   patternOptions?: TPatternOptions
   className?: string
   children: ReactNode
+  canvasStyles?: CSSProperties
+  containerStyles?: CSSProperties
 }
 
-
-export function ActiveBackground({ Pattern, patternOptions, className, children }: ActiveBackgroundProps): JSX.Element {
+export function ActiveBackground({
+  Pattern,
+  patternOptions,
+  className,
+  children,
+  canvasStyles = {},
+  containerStyles = {},
+}: ActiveBackgroundProps): JSX.Element {
   const [canvasRef, setRef] = useState<HTMLCanvasElement | null>(null)
   const onRefSet = useCallback((ref) => setRef(ref), [setRef])
   const [update, setUpdate] = useState({})
@@ -58,10 +63,7 @@ export function ActiveBackground({ Pattern, patternOptions, className, children 
       return
     }
 
-    const background = new Pattern(
-      canvasRef,
-      patternOptions
-    )
+    const background = new Pattern(canvasRef, patternOptions)
 
     background.start()
 
@@ -75,11 +77,13 @@ export function ActiveBackground({ Pattern, patternOptions, className, children 
   return (
     <>
       <canvas
-        style={{ position: 'absolute' }}
+        style={{ position: 'absolute', ...canvasStyles }}
         className={className}
         ref={onRefSet}
       />
-      <div style={{ position: 'relative' }}>{children}</div>
+      <div style={{ position: 'relative', height: '100%', ...containerStyles }}>
+        {children}
+      </div>
     </>
   )
 }
