@@ -1,6 +1,11 @@
-import type { ActiveBackgroundPattern, PatternOptions } from '../ActiveBackground'
+import type {
+  ActiveBackgroundPattern,
+  PatternOptions,
+} from '../ActiveBackground'
 import { ConfettiPaper } from './Confetti/ConfettiPaper'
 import { ConfettiRibbon } from './Confetti/ConfettiRibbon'
+
+type ColorPair = [string, string]
 
 export interface ConfettiOptions extends PatternOptions {
   speed?: number
@@ -8,6 +13,7 @@ export interface ConfettiOptions extends PatternOptions {
   confettiPaperCount?: number
   scaleConfettiCount?: boolean
   confettiRibbonCount?: number
+  colorPairs?: ColorPair[]
 }
 
 const SPEED = 50
@@ -15,7 +21,7 @@ const DEFAULT_CONFETTI_PAPERS = 50
 const DEFAULT_CONFETTI_RIBBONS = 10
 const DEFAULT_SCALE_CONFETTI_COUNT = true
 
-const COLORS = [
+const COLORS: ColorPair[] = [
   ['#df0049', '#660671'],
   ['#00e857', '#005291'],
   ['#2bebbc', '#05798a'],
@@ -34,6 +40,7 @@ export class Confetti implements ActiveBackgroundPattern {
   private readonly duration: number
   private readonly confettiPapers: ConfettiPaper[]
   private readonly confettiRibbons: ConfettiRibbon[]
+  private readonly colorPairs: ColorPair[]
 
   private animationFrameRequestId: number | null
 
@@ -48,6 +55,8 @@ export class Confetti implements ActiveBackgroundPattern {
     this.width = canvas.offsetWidth * this.ratio
     this.height = canvas.offsetHeight * this.ratio
 
+    this.colorPairs = options?.colorPairs ?? COLORS
+
     let confettiPaperCount =
       options?.confettiPaperCount ?? DEFAULT_CONFETTI_PAPERS
 
@@ -55,10 +64,12 @@ export class Confetti implements ActiveBackgroundPattern {
       confettiPaperCount = Math.round(confettiPaperCount / this.ratio)
     }
 
+    const getRandomColorPair = getRandomColors(this.colorPairs)
+
     this.confettiPapers = [...new Array(confettiPaperCount)].map(() => {
       return new ConfettiPaper({
         parent: this,
-        fetchColors: getRandomColors,
+        fetchColors: getRandomColorPair,
       })
     })
 
@@ -68,7 +79,7 @@ export class Confetti implements ActiveBackgroundPattern {
     this.confettiRibbons = [...new Array(confettiRibbonCount)].map(() => {
       return new ConfettiRibbon({
         parent: this,
-        fetchColors: getRandomColors,
+        fetchColors: getRandomColorPair,
       })
     })
 
@@ -106,7 +117,9 @@ export class Confetti implements ActiveBackgroundPattern {
   }
 }
 
-function getRandomColors(colors: string[][] = COLORS): string[] {
-  const randomIndex = Math.round(Math.random() * (colors.length - 1))
-  return colors[randomIndex]
+function getRandomColors(colors: ColorPair[] = COLORS): () => ColorPair {
+  return function () {
+    const randomIndex = Math.round(Math.random() * (colors.length - 1))
+    return colors[randomIndex]
+  }
 }
