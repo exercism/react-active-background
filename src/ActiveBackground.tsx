@@ -73,7 +73,7 @@ export function ActiveBackground({
   }, [canvasRef, Pattern, patternOptions, update])
 
   const baseStyle = {
-    position: 'fixed',
+    position: 'absolute',
     top: 0,
     right: 0,
     bottom: 0,
