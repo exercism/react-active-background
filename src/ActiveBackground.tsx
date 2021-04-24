@@ -72,16 +72,32 @@ export function ActiveBackground({
     }
   }, [canvasRef, Pattern, patternOptions, update])
 
+  const baseStyle = {
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  } as CSSProperties
+
   const selfClassName = 'active-background-canvas'
   className = className ? `${className} ${selfClassName}` : selfClassName
   return (
     <>
       <canvas
-        style={{ position: 'absolute', ...canvasStyles }}
+        style={{
+          ...baseStyle,
+          ...canvasStyles,
+        }}
         className={className}
         ref={onRefSet}
       />
-      <div style={{ position: 'relative', height: '100%', ...containerStyles }}>
+      <div
+        style={{
+          ...baseStyle,
+          ...containerStyles,
+        }}
+      >
         {children}
       </div>
     </>
